@@ -345,6 +345,38 @@ bool riscv_inst_decode(char *str, uint32_t pc, uint32_t opcode)
     {
         sprintf(str, "%08x: wfi", pc);
     }
+    else if ((opcode & INST_ZEXT_H_MASK) == INST_ZEXT_H)
+    {
+        sprintf(str, "%08x: zext.h r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_SEXT_B_MASK) == INST_SEXT_B)
+    {
+        sprintf(str, "%08x: sext.b r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_SEXT_H_MASK) == INST_SEXT_H)
+    {
+        sprintf(str, "%08x: sext.h r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_ROL_MASK) == INST_ROL)
+    {
+        sprintf(str, "%08x: rol r%d, r%d, r%d", pc, rd, rs1, rs2);
+    }
+    else if ((opcode & INST_ROR_MASK) == INST_ROR)
+    {
+        sprintf(str, "%08x: ror r%d, r%d, r%d", pc, rd, rs1, rs2);
+    }
+    else if ((opcode & INST_RORI_MASK) == INST_RORI)
+    {
+        sprintf(str, "%08x: rori r%d, r%d, %d", pc, rd, rs1, shamt);
+    }
+    else if((opcode & INST_ORC_B_MASK) == INST_ORC_B)
+    {
+        sprintf(str, "%08x: orc.b r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_REV8_MASK) == INST_REV8)
+    {
+        sprintf(str, "%08x: rev8 r%d, r%d", pc, rd, rs1);
+    }
     else
     {
         sprintf(str, "%08x: invalid!", pc);

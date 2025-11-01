@@ -117,6 +117,14 @@ enum eInstructions
     ENUM_INST_REMU,
     ENUM_INST_FENCE,
     ENUM_INST_WFI,
+    ENUM_INST_ZEXT_H,
+    ENUM_INST_SEXT_B,
+    ENUM_INST_SEXT_H,
+    ENUM_INST_ROL,
+    ENUM_INST_ROR,
+    ENUM_INST_RORI,
+    ENUM_INST_ORC_B,
+    ENUM_INST_REV8,
     ENUM_INST_MAX
 };
 
@@ -180,6 +188,14 @@ static const char * inst_names[ENUM_INST_MAX+1] =
     [ENUM_INST_REMU] = "remu",
     [ENUM_INST_FENCE] = "fence",
     [ENUM_INST_WFI] = "wfi",
+    [ENUM_INST_ZEXT_H] = "zext.h",
+    [ENUM_INST_SEXT_B] = "sext.b",
+    [ENUM_INST_SEXT_H] = "sext.h",
+    [ENUM_INST_ROL] = "rol",
+    [ENUM_INST_ROR] = "ror",
+    [ENUM_INST_RORI] = "rori",
+    [ENUM_INST_ORC_B] = "orc.b",
+    [ENUM_INST_REV8] = "rev8",
     [ENUM_INST_MAX] = ""
 };
 
@@ -426,6 +442,38 @@ static const char * inst_names[ENUM_INST_MAX+1] =
 // wfi
 #define INST_WFI 0x10500073
 #define INST_WFI_MASK 0xffff8fff
+
+// ZEXT_H
+#define INST_ZEXT_H       0x08004033u      /* (funct7=0x04)<<25 | (funct3=0x4)<<12 | opcode=0x33 */
+#define INST_ZEXT_H_MASK  0xFFF0707Fu      /* 比對 funct7[31:25]、rs2=0[24:20]、funct3[14:12]、opcode[6:0] */
+
+// SEXT_B
+#define INST_SEXT_B       0x60401013u      /* imm12=0x604 放 [31:20]，funct3=0x1，opcode=0x13 */
+#define INST_SEXT_B_MASK  0xFFF0707Fu
+
+// SEXT_H
+#define INST_SEXT_H       0x60501013u
+#define INST_SEXT_H_MASK  0xFFF0707Fu
+
+// ROL
+#define INST_ROL          0x60001033u      /* (0x30<<25) | (0x1<<12) | 0x33 */
+#define INST_ROL_MASK     0xFE00707Fu      /* 比對 funct7、funct3、opcode；rs2/rs1/rd 不比對 */
+
+// ROR
+#define INST_ROR          0x60005033u
+#define INST_ROR_MASK     0xFE00707Fu
+
+// RORI
+#define INST_RORI    0x60005013u      /* 只固定 imm[11:5]=0x30，funct3=0x5，opcode=0x13 */
+#define INST_RORI_MASK    0xFE00707Fu      /* 不比對 shamt[24:20] */
+
+// orc.b
+#define INST_ORC_B 0x28705013
+#define INST_ORC_B_MASK 0xFFF0707F
+
+// rev8
+#define INST_REV8 0x69805013
+#define INST_REV8_MASK 0xFFF0707F
 
 #define IS_LOAD_INST(a)     (((a) & 0x7F) == 0x03)
 #define IS_STORE_INST(a)    (((a) & 0x7F) == 0x23)

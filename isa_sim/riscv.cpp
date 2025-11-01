@@ -1505,6 +1505,79 @@ void Riscv::execute(void)
         INST_STAT(ENUM_INST_WFI);
         pc += 4;
     }
+    else if((opcode & INST_ZEXT_H_MASK) == INST_ZEXT_H)
+    {
+        // ['rd', 'rs1']
+        DPRINTF(LOG_INST,("%08x: zext.h r%d, r%d\n", pc, rd, rs1));
+        INST_STAT(ENUM_INST_ZEXT_H);
+        reg_rd = reg_rs1 & 0x0000FFFF;
+        pc += 4;
+    }
+    else if((opcode & INST_SEXT_B_MASK) == INST_SEXT_B)
+    {
+        // ['rd', 'rs1']
+        DPRINTF(LOG_INST,("%08x: sext.b r%d, r%d\n", pc, rd, rs1));
+        INST_STAT(ENUM_INST_SEXT_B);
+
+        reg_rd = ((reg_rs1 & 0x000000FF) & (1 << 7)) ? ((-1) << 8) | (reg_rs1 & 0x000000FF) : (reg_rs1 & 0x000000FF);
+        pc += 4;
+    }
+    else if((opcode & INST_SEXT_H_MASK) == INST_SEXT_H)
+    {
+        // ['rd', 'rs1']
+        DPRINTF(LOG_INST,("%08x: sext.h r%d, r%d\n", pc, rd, rs1));
+        INST_STAT(ENUM_INST_SEXT_H);
+
+        reg_rd = ((reg_rs1 & 0x0000FFFF) & (1 << 15)) ? ((-1) << 16) | (reg_rs1 & 0x0000FFFF) : (reg_rs1 & 0x0000FFFF);
+        pc += 4;
+    }
+    else if ((opcode & INST_ROL_MASK) == INST_ROL)
+    {
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: rol r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_ROL);
+        reg_rd = (reg_rs1 << (reg_rs2 & 0x1F)) | (reg_rs1 >> (32 - (reg_rs2 & 0x1F)));
+        pc += 4;
+    }
+    else if ((opcode & INST_ROR_MASK) == INST_ROR)
+    {
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: ror r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_ROR);
+        reg_rd = (reg_rs1 >> (reg_rs2 & 0x1F)) | (reg_rs1 << (32 - (reg_rs2 & 0x1F)));
+        pc += 4;
+    }
+    else if ((opcode & INST_RORI_MASK) == INST_RORI)
+    {
+        // ['rd', 'rs1', 'imm']
+        DPRINTF(LOG_INST,("%08x: rori r%d, r%d, %d\n", pc, rd, rs1, shamt));
+        INST_STAT(ENUM_INST_RORI);
+        reg_rd = (reg_rs1 >> (shamt & 0x1F)) | (reg_rs1 << (32 - (shamt & 0x1F)));
+        pc += 4;
+    }
+    else if ((opcode & INST_ORC_B_MASK) == INST_ORC_B)
+    {
+        // ['rd', 'rs1']
+        DPRINTF(LOG_INST,("%08x: orc.b r%d, r%d\n", pc, rd, rs1));
+        INST_STAT(ENUM_INST_ORC_B);
+        uint32_t byte1 = (reg_rs1 & 0x000000FF) ? 0x000000FF : 0x00000000;
+        uint32_t byte2 = (reg_rs1 & 0x0000FF00) ? 0x0000FF00 : 0x00000000;
+        uint32_t byte3 = (reg_rs1 & 0x00FF0000) ? 0x00FF0000 : 0x00000000;
+        uint32_t byte4 = (reg_rs1 & 0xFF000000) ? 0xFF000000 : 0x00000000;
+        reg_rd = byte1 | byte2 | byte3 | byte4;
+        pc += 4;
+    }
+    else if ((opcode & INST_REV8_MASK) == INST_REV8)
+    {
+        DPRINTF(LOG_INST,("%08x: rev8 r%d, r%d\n", pc, rd, rs1));
+        INST_STAT(ENUM_INST_REV8);
+        reg_rd= ((reg_rs1 & 0x000000FF) << 24) |
+                        ((reg_rs1 & 0x0000FF00) << 8)  |
+                        ((reg_rs1 & 0x00FF0000) >> 8)  |
+                        ((reg_rs1 & 0xFF000000) >> 24);
+        pc += 4;
+    }
+    
     else
     {
         error(false, "Bad instruction @ %x (opcode %x)\n", pc, opcode);
