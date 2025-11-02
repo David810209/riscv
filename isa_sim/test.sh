@@ -1,35 +1,71 @@
 #!/bin/bash
-set -e
 
 cd mytest
 
-CC=riscv32-unknown-elf-gcc
+if command -v riscv32-unknown-elf-gcc >/dev/null 2>&1; then
+    CC=riscv32-unknown-elf-gcc
+else 
+    CC=riscv64-unknown-elf-gcc
+fi
 CFLAGS="-march=rv32im_zbb -mabi=ilp32 -nostdlib -ffreestanding -fno-exceptions -fno-asynchronous-unwind-tables -O2 -T link.ld"
 
-$CC $CFLAGS -o zext_h_test.elf zext_h_test.c
-$CC $CFLAGS -o sext_b_test.elf sext_b_test.c
-$CC $CFLAGS -o sext_h_test.elf sext_h_test.c
-$CC $CFLAGS -o rol_test.elf rol_test.c
-$CC $CFLAGS -o ror_test.elf ror_test.c
-$CC $CFLAGS -o rori_test.elf rori_test.c
-$CC $CFLAGS -o orc_b_test.elf orc_b_test.c
-$CC $CFLAGS -o rev8_test.elf rev8_test.c
+test_set=(
+    zext_h
+    sext_b
+    sext_h
+    rol
+    ror
+    rori
+    orc_b
+    rev8
+)
+    
+for test in "${test_set[@]}"; do
+    $CC $CFLAGS -o ${test}_test.elf ${test}_test.c
+done
 
 cd ..
 
 make
 
 SIM=./riscv-sim
-for elf in \
-    mytest/zext_h_test.elf \
-    mytest/sext_b_test.elf \
-    mytest/sext_h_test.elf \
-    mytest/rol_test.elf \
-    mytest/ror_test.elf \
-    mytest/rori_test.elf \
-    mytest/orc_b_test.elf \
-    mytest/rev8_test.elf
-do
-    echo "Running $elf"
-    $SIM -f "$elf"
+pass_count=0
+fail_count=0
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+for test in "${test_set[@]}"; do
+    elf_path="mytest/${test}_test.elf"
+    echo "----------------------------------------"
+    echo "Running ${elf_path}"
+
+    if [[ ! -f "$elf_path" ]]; then
+        echo -e "${YELLOW}⚠️  ELF not found, skipping ${test}${NC}"
+        ((fail_count++))
+        continue
+    fi
+
+    output=$($SIM -f "${elf_path}" 2>&1)
+    result=$?
+
+    echo "$output"
+
+    if [ $result -ne 0 ]; then
+        echo -e "${RED}❌ ${test} FAILED (exit code ${result})${NC}"
+        ((fail_count++))
+    elif echo "$output" | grep -q "ERR"; then
+        echo -e "${RED}❌ ${test} FAILED (found ERR in output)${NC}"
+        ((fail_count++))
+    else
+        echo -e "${GREEN}✅ ${test} PASSED${NC}"
+        ((pass_count++))
+    fi
+    echo
 done
+
+echo "========================================"
+echo -e "${GREEN}${pass_count} test(s) passed${NC}, ${RED}${fail_count} test(s) failed${NC}"
+echo "========================================"
