@@ -125,7 +125,20 @@ enum eInstructions
     ENUM_INST_RORI,
     ENUM_INST_ORC_B,
     ENUM_INST_REV8,
+    // part A
+    ENUM_INST_ANDN,
+	ENUM_INST_ORN,
+	ENUM_INST_XNOR,
+	ENUM_INST_SH1ADD,
+	ENUM_INST_SH2ADD,
+	ENUM_INST_SH3ADD,
+	ENUM_INST_CLZ,
+	ENUM_INST_CTZ,
+	ENUM_INST_CPOP,
+
     ENUM_INST_MAX
+
+    
 };
 
 static const char * inst_names[ENUM_INST_MAX+1] = 
@@ -196,6 +209,18 @@ static const char * inst_names[ENUM_INST_MAX+1] =
     [ENUM_INST_RORI] = "rori",
     [ENUM_INST_ORC_B] = "orc.b",
     [ENUM_INST_REV8] = "rev8",
+
+    // part A
+    [ENUM_INST_ANDN] = "andn",
+	[ENUM_INST_ORN] = "orn",
+	[ENUM_INST_XNOR] = "xnor",
+	[ENUM_INST_SH1ADD] = "sh1add",
+	[ENUM_INST_SH2ADD] = "sh2add",
+	[ENUM_INST_SH3ADD] = "sh3add",
+	[ENUM_INST_CLZ] = "clz",
+	[ENUM_INST_CTZ] = "ctz",
+	[ENUM_INST_CPOP] = "cpop",
+
     [ENUM_INST_MAX] = ""
 };
 
@@ -474,6 +499,43 @@ static const char * inst_names[ENUM_INST_MAX+1] =
 // rev8
 #define INST_REV8 0x69805013
 #define INST_REV8_MASK 0xFFF0707F
+
+// part A
+// ANDN
+#define INST_ANDN 0x40007033u
+#define INST_ANDN_MASK 0xFE00707Fu
+
+// ORN
+#define INST_ORN 0x40006033u
+#define INST_ORN_MASK 0xFE00707Fu
+
+// XNOR
+#define INST_XNOR 0x40004033u
+#define INST_XNOR_MASK 0xFE00707Fu
+
+// SH1ADD
+#define INST_SH1ADD 0x20002033u
+#define INST_SH1ADD_MASK 0xFE00707Fu
+
+// SH2ADD
+#define INST_SH2ADD 0x20004033u
+#define INST_SH2ADD_MASK 0xFE00707Fu
+
+// SH3ADD
+#define INST_SH3ADD 0x20006033u
+#define INST_SH3ADD_MASK 0xFE00707Fu
+
+// CLZ
+#define INST_CLZ 0x60001013u
+#define INST_CLZ_MASK 0xFFF0707Fu
+
+// CTZ
+#define INST_CTZ 0x60101013u
+#define INST_CTZ_MASK 0xFFF0707Fu
+
+// CPOP
+#define INST_CPOP 0x60201013u
+#define INST_CPOP_MASK 0xFFF0707Fu
 
 #define IS_LOAD_INST(a)     (((a) & 0x7F) == 0x03)
 #define IS_STORE_INST(a)    (((a) & 0x7F) == 0x23)
