@@ -377,6 +377,43 @@ bool riscv_inst_decode(char *str, uint32_t pc, uint32_t opcode)
     {
         sprintf(str, "%08x: rev8 r%d, r%d", pc, rd, rs1);
     }
+    // part A
+    else if ((opcode & INST_ANDN_MASK) == INST_ANDN)
+    {
+        sprintf(str, "%08x: andn r%d, r%d, r%d", pc, rd, rs1, rs2);   
+    }
+    else if ((opcode & INST_ORN_MASK) == INST_ORN)
+    {
+        sprintf(str, "%08x: orn r%d, r%d, r%d", pc, rd, rs1, rs2);   
+    }
+    else if ((opcode & INST_XNOR_MASK) == INST_XNOR)
+    {
+        sprintf(str, "%08x: xnor r%d, r%d, r%d", pc, rd, rs1, rs2);   
+    }
+    else if ((opcode & INST_SH1ADD_MASK) == INST_SH1ADD)
+    {
+        sprintf(str, "%08x: sh1add r%d, r%d, r%d", pc, rd, rs1, rs2);   
+    }
+    else if ((opcode & INST_SH2ADD_MASK) == INST_SH2ADD)
+    {
+        sprintf(str, "%08x: sh2add r%d, r%d, r%d", pc, rd, rs1, rs2);   
+    }
+    else if ((opcode & INST_SH3ADD_MASK) == INST_SH3ADD)
+    {
+        sprintf(str, "%08x: sh3add r%d, r%d, r%d", pc, rd, rs1, rs2);   
+    }
+    else if ((opcode & INST_CLZ_MASK) == INST_CLZ)
+    {
+        sprintf(str, "%08x: clz r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_CTZ_MASK) == INST_CTZ)
+    {
+        sprintf(str, "%08x: ctz r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_CPOP_MASK) == INST_CPOP)
+    {
+        sprintf(str, "%08x: cpop r%d, r%d", pc, rd, rs1);
+    }
     else
     {
         sprintf(str, "%08x: invalid!", pc);

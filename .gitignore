@@ -1,0 +1,4 @@
+isa_sim/obj/riscv-sim/
+isa_sim/mytest/*.elf
+isa_sim/libisa_sim.a
+isa_sim/riscv-sim

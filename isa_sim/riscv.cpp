@@ -1577,6 +1577,96 @@ void Riscv::execute(void)
                         ((reg_rs1 & 0xFF000000) >> 24);
         pc += 4;
     }
+    // part A
+    else if ((opcode & INST_ANDN_MASK) == INST_ANDN)
+    {
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: andn r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_ANDN);
+        reg_rd = reg_rs1 & (~reg_rs2);
+        pc += 4;        
+    }
+    else if ((opcode & INST_ORN_MASK) == INST_ORN)
+    {
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: orn r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_ORN);
+        reg_rd = reg_rs1 | (~reg_rs2);
+        pc += 4;        
+    }
+    else if ((opcode & INST_XNOR_MASK) == INST_XNOR)
+    {
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: xnor r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_XORN);
+        reg_rd = ~(reg_rs1 ^ reg_rs2);
+        pc += 4;        
+    }
+    else if ((opcode & INST_SH1ADD_MASK) == INST_SH1ADD)
+    {
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: sh1add r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_SH1ADD);
+        reg_rd = reg_rs2 + (reg_rs1 << 1);
+        pc += 4;        
+    }
+    else if ((opcode & INST_SH2ADD_MASK) == INST_SH2ADD)
+    {
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: sh2add r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_SH2ADD);
+        reg_rd = reg_rs2 + (reg_rs1 << 2);
+        pc += 4;        
+    }
+    else if ((opcode & INST_SH3ADD_MASK) == INST_SH3ADD)
+    {
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: sh3add r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_SH3ADD);
+        reg_rd = reg_rs2 + (reg_rs1 << 3);
+        pc += 4;        
+    }
+    else if((opcode & INST_CLZ_MASK) == INST_CLZ)
+    {
+        // ['rd', 'rs1']
+        DPRINTF(LOG_INST,("%08x: clz r%d, r%d\n", pc, rd, rs1));
+        INST_STAT(ENUM_INST_CLZ);
+        uint32_t rs = reg_rs1;
+        int cnt = 0;
+        for (int i = 31; i >= 0; i--) {
+            if ((rs >> i) & 1) break;
+            cnt++;
+        }
+        reg_rd = cnt;
+        pc += 4;
+    }
+    else if((opcode & INST_CTZ_MASK) == INST_CTZ)
+    {
+        // ['rd', 'rs1']
+        DPRINTF(LOG_INST,("%08x: ctz r%d, r%d\n", pc, rd, rs1));
+        INST_STAT(ENUM_INST_CTZ);
+        uint32_t rs = reg_rs1;
+        int cnt = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((rs >> i) & 1) break;
+            cnt++;
+        }
+        reg_rd = cnt;
+        pc += 4;
+    }
+    else if((opcode & INST_CPOP_MASK) == INST_CPOP)
+    {
+        // ['rd', 'rs1']
+        DPRINTF(LOG_INST,("%08x: cpop r%d, r%d\n", pc, rd, rs1));
+        INST_STAT(ENUM_INST_CPOP);
+        uint32_t rs = reg_rs1;
+        int cnt = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((rs >> i) & 1) cnt++;
+        }
+        reg_rd = cnt;
+        pc += 4;
+    }
     
     else
     {
