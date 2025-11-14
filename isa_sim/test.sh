@@ -7,18 +7,26 @@ if command -v riscv32-unknown-elf-gcc >/dev/null 2>&1; then
 else 
     CC=riscv64-unknown-elf-gcc
 fi
-CFLAGS="-march=rv32im_zicsr_zba_zbb -mabi=ilp32 -nostdlib -ffreestanding -fno-exceptions -fno-asynchronous-unwind-tables -O2 -T link.ld"
+CFLAGS="-march=rv32im_zicsr_zba_zbb_zbs -mabi=ilp32 -nostdlib -ffreestanding -fno-exceptions -fno-asynchronous-unwind-tables -O2 -T link.ld"
 
 test_set=(
-    andn
-    orn
-    xnor
-    sh1add
-    sh2add
-    sh3add
-    clz
-    ctz
-    cpop
+    # andn
+    # orn
+    # xnor
+    # sh1add
+    # sh2add
+    # sh3add
+    # clz
+    # ctz
+    # cpop
+    bset
+    bseti
+    bclr
+    bclri
+    binv
+    binvi
+    bext
+    bexti
 )
     
 for test in "${test_set[@]}"; do

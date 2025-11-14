@@ -1667,7 +1667,63 @@ void Riscv::execute(void)
         reg_rd = cnt;
         pc += 4;
     }
-    
+
+    else if((opcode & INST_BSET_MASK) == INST_BSET){
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: bset r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_BSET);
+        reg_rd = reg_rs1 | (1 << (reg_rs2 & 0x1F));
+        pc += 4;
+    }
+    else if ((opcode & INST_BSETI_MASK) == INST_BSETI){
+        // ['rd', 'rs1', 'imm5']
+        DPRINTF(LOG_INST,("%08x: bseti r%d, r%d, %d\n", pc, rd, rs1, shamt));
+        INST_STAT(ENUM_INST_BSETI);
+        reg_rd = reg_rs1 | (1 << (shamt & 0x1F));
+        pc += 4;
+    }
+    else if((opcode & INST_BCLR_MASK) == INST_BCLR){
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: bclr r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_BCLR);
+        reg_rd = reg_rs1 & ~(1 << (reg_rs2 & 0x1F));
+        pc += 4;
+    }
+    else if((opcode & INST_BCLRI_MASK) == INST_BCLRI){
+        // ['rd', 'rs1', 'imm5']
+        DPRINTF(LOG_INST,("%08x: bclri r%d, r%d, %d\n", pc, rd, rs1, shamt));
+        INST_STAT(ENUM_INST_BCLRI);
+        reg_rd = reg_rs1 & ~(1 << (shamt & 0x1F));
+        pc += 4;
+    }
+    else if((opcode & INST_BINV_MASK) == INST_BINV){
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: binv r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_BINV);
+        reg_rd = reg_rs1 ^ (1 << (reg_rs2 & 0x1F));
+        pc += 4;
+    }
+    else if((opcode & INST_BINVI_MASK) == INST_BINVI){
+        // ['rd', 'rs1', 'imm5']
+        DPRINTF(LOG_INST,("%08x: binvi r%d, r%d, %d\n", pc, rd, rs1, shamt));
+        INST_STAT(ENUM_INST_BINVI);
+        reg_rd = reg_rs1 ^ (1 << (shamt & 0x1F));
+        pc += 4;
+    }
+    else if((opcode & INST_BEXT_MASK) == INST_BEXT){
+        // ['rd', 'rs1', 'rs2']
+        DPRINTF(LOG_INST,("%08x: bext r%d, r%d, r%d\n", pc, rd, rs1, rs2));
+        INST_STAT(ENUM_INST_BEXT);
+        reg_rd = (reg_rs1 >> (reg_rs2 & 0x1F)) & 0x1;
+        pc += 4;
+    }
+    else if((opcode & INST_BEXTI_MASK) == INST_BEXTI){
+        // ['rd', 'rs1', 'imm5']
+        DPRINTF(LOG_INST,("%08x: bexti r%d, r%d, %d\n", pc, rd, rs1, shamt));
+        INST_STAT(ENUM_INST_BEXTI);
+        reg_rd = (reg_rs1 >> (shamt & 0x1F)) & 0x1;
+        pc += 4;
+    }
     else
     {
         error(false, "Bad instruction @ %x (opcode %x)\n", pc, opcode);

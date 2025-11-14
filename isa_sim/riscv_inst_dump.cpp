@@ -414,6 +414,38 @@ bool riscv_inst_decode(char *str, uint32_t pc, uint32_t opcode)
     {
         sprintf(str, "%08x: cpop r%d, r%d", pc, rd, rs1);
     }
+    else if ((opcode & INST_BSET_MASK) == INST_BSET)
+    {
+        sprintf(str, "%08x: bset r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_BSETI_MASK) == INST_BSETI)
+    {
+        sprintf(str, "%08x: bseti r%d, %d", pc, rd, shamt);
+    }
+    else if ((opcode & INST_BCLR_MASK) == INST_BCLR)
+    {
+        sprintf(str, "%08x: bclr r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_BCLRI_MASK) == INST_BCLRI)
+    {
+        sprintf(str, "%08x: bclri r%d, %d", pc, rd, shamt);
+    }
+    else if ((opcode & INST_BINV_MASK) == INST_BINV)
+    {
+        sprintf(str, "%08x: binv r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_BINVI_MASK) == INST_BINVI)
+    {
+        sprintf(str, "%08x: binvi r%d, %d", pc, rd, shamt);
+    }
+    else if ((opcode & INST_BEXT_MASK) == INST_BEXT)
+    {
+        sprintf(str, "%08x: bext r%d, r%d", pc, rd, rs1);
+    }
+    else if ((opcode & INST_BEXTI_MASK) == INST_BEXTI)
+    {
+        sprintf(str, "%08x: bexti r%d, %d", pc, rd, shamt);
+    }
     else
     {
         sprintf(str, "%08x: invalid!", pc);

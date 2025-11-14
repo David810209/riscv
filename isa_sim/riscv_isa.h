@@ -135,6 +135,15 @@ enum eInstructions
 	ENUM_INST_CLZ,
 	ENUM_INST_CTZ,
 	ENUM_INST_CPOP,
+    // part B 
+    ENUM_INST_BSET,
+    ENUM_INST_BSETI,
+    ENUM_INST_BCLR,
+    ENUM_INST_BCLRI,
+    ENUM_INST_BINV,
+    ENUM_INST_BINVI,
+    ENUM_INST_BEXT,
+    ENUM_INST_BEXTI,
 
     ENUM_INST_MAX
 
@@ -220,6 +229,16 @@ static const char * inst_names[ENUM_INST_MAX+1] =
 	[ENUM_INST_CLZ] = "clz",
 	[ENUM_INST_CTZ] = "ctz",
 	[ENUM_INST_CPOP] = "cpop",
+
+    // part B
+    [ENUM_INST_BSET] = "bset",
+    [ENUM_INST_BSETI] = "bseti",
+    [ENUM_INST_BCLR] = "bclr",
+    [ENUM_INST_BCLRI] = "bclri",
+    [ENUM_INST_BINV] = "binv",
+    [ENUM_INST_BINVI] = "binvi",
+    [ENUM_INST_BEXT] = "bext",
+    [ENUM_INST_BEXTI] = "bexti",
 
     [ENUM_INST_MAX] = ""
 };
@@ -536,6 +555,39 @@ static const char * inst_names[ENUM_INST_MAX+1] =
 // CPOP
 #define INST_CPOP 0x60201013u
 #define INST_CPOP_MASK 0xFFF0707Fu
+
+// part B
+// BSET
+#define INST_BSET 0x28001033u 
+#define INST_BSET_MASK 0xFE00707Fu 
+
+// BSETI
+#define INST_BSETI      0x28001013u
+#define INST_BSETI_MASK 0xFE00707Fu
+
+// BCLR
+#define INST_BCLR 0x48001033u
+#define INST_BCLR_MASK 0xFE00707Fu
+
+// BCLRI
+#define INST_BCLRI 0x48001013u
+#define INST_BCLRI_MASK 0xFE00707Fu
+
+// BINV
+#define INST_BINV 0x68001033u
+#define INST_BINV_MASK 0xFE00707Fu
+
+// BINVI
+#define INST_BINVI 0x68001013u
+#define INST_BINVI_MASK 0xFE00707Fu
+
+// BEXT
+#define INST_BEXT 0x48005033u
+#define INST_BEXT_MASK 0xFE00707Fu
+
+// BEXTI
+#define INST_BEXTI 0x48005013u
+#define INST_BEXTI_MASK 0xFE00707Fu
 
 #define IS_LOAD_INST(a)     (((a) & 0x7F) == 0x03)
 #define IS_STORE_INST(a)    (((a) & 0x7F) == 0x23)
