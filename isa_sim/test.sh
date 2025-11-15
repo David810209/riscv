@@ -10,15 +10,23 @@ fi
 CFLAGS="-march=rv32im_zicsr_zba_zbb_zbs -mabi=ilp32 -nostdlib -ffreestanding -fno-exceptions -fno-asynchronous-unwind-tables -O2 -T link.ld"
 
 test_set=(
-    # andn
-    # orn
-    # xnor
-    # sh1add
-    # sh2add
-    # sh3add
-    # clz
-    # ctz
-    # cpop
+    zext_h
+    sext_b
+    sext_h
+    rol
+    ror
+    rori
+    orc_b
+    rev8
+    andn
+    orn
+    xnor
+    sh1add
+    sh2add
+    sh3add
+    clz
+    ctz
+    cpop
     bset
     bseti
     bclr
